@@ -30,12 +30,25 @@ print('Aguardando conexões...')
 threads_connections = []
 
 # lista que armazena os clientes
-clients_list = []
+conn_list = []
 
 # trava para impedir as threads de alterar partes criticas so programa ao mesmo tempo
 lock = threading.Lock()
 
-def manage_connection(conn, addr, conn_list):
+def send_broadcast(conn, conn_list, message):
+    """ Envia uma mensagem para todos os usuários conectados com exceçao de quem a enviou 
+
+       Parâmetros: 
+       conn: conexão que enviou a mensagem
+       conn_list: lista de todas as conexões
+       message: mensagem a ser transmitida
+    """
+    with lock:
+        for c in conn_list:
+            if c != conn:
+                c.sendall(message.encode())
+
+def manage_connection(conn, ip, port, conn_list):
     """ Gerencia as conexoes: recebe mensages do clientes, envia para todos os outros e encerra a conexão com esse cliente quado solicitado
     
     Parâmetros:
@@ -44,31 +57,24 @@ def manage_connection(conn, addr, conn_list):
         conn_list: lista com todas as conexoes dos clientes conectados
     """
     message = conn.recv(1024)
-    goodbye_message = f'Usuário {addr[0]}:{addr[1]} saiu do chat.' # mensagem que indica que o dono desta conexão da thread saiu do chat
+    goodbye_message = f'Usuário {ip}:{port} saiu do chat.' # mensagem que indica que o dono desta conexão da thread saiu do chat
 
     while message != b'\\sair\n' and message != b'\\sair':
-        print(f'({datetime.now()}). Cliente {addr[0]}:{addr[1]} >> {message.decode()}')
-        message = f'{addr[0]}:{addr[1]} >> ' + message.decode()
+        print(f'({datetime.now()}). Cliente {ip}:{port} >> {message.decode()}')
+        message = f'{ip}:{port} >> ' + message.decode()
 
-        # envia a mensagem para todos os usuarios, exceto a quem enviou
-        with lock:
-            for c in conn_list:
-                if c[0] != conn:
-                    c[0].sendall(message.encode())
-
+        send_broadcast(conn, conn_list, message)        
         message = conn.recv(1024)
 
     # avisa a todos os outros usuários que um dado usuário saiu
-    with lock:
-        for c in conn_list:
-            if c[0] != conn:
-                c[0].sendall(goodbye_message.encode())
+    send_broadcast(conn, conn_list, goodbye_message)            
 
         # encerra a conexão e remove o dono desta conexão
+    with lock:
         conn.close()
-        conn_list.remove((conn, addr))
+        conn_list.remove(conn)
 
-    print(f'Cliente {addr[0]}:{addr[1]} encerrou a conexão.')
+    print(f'Cliente {ip}:{port} encerrou a conexão.')
 
 # fluxo da thread principal: aceita conexões, adiciona os clinetes e threadas nas listas, e gerencia as chamadas às threads filhas
 while True:
@@ -79,21 +85,19 @@ while True:
         if len(threads_connections) > 0:
             print('Aguardando todos os clientes se desconectarem.')
         break
-        
-    print(f'Cliente {addr[0]}:{addr[1]} iniciou a conexão.')
+    
+    IP_ADDRESS_CLIENT, PORT_CLIENT = addr
+    print(f'Cliente {IP_ADDRESS_CLIENT}:{PORT_CLIENT} iniciou a conexão.')
     
     # adiciona os clientes na lista
     with lock:
-        clients_list.append((conn, addr))
+        conn_list.append(conn)
 
-    welcome_message = f'Usuário {addr[0]}:{addr[1]} entrou no chat.'
-    with lock:
-        for c in clients_list:
-            if c[0] != conn:
-                c[0].sendall(welcome_message.encode())
+    welcome_message = f'Usuário {IP_ADDRESS_CLIENT}:{PORT_CLIENT} entrou no chat.'
+    send_broadcast(conn, conn_list, welcome_message)            
 
     # cria as threads e adiciona na lista
-    t = threading.Thread(target=manage_connection, args=(conn, addr, clients_list))
+    t = threading.Thread(target=manage_connection, args=(conn, IP_ADDRESS_CLIENT, PORT_CLIENT, conn_list))
     threads_connections.append(t)
     t.start()
 

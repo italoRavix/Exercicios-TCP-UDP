@@ -1,6 +1,7 @@
 # Exercicio 01 - server
 # Italo Tadeu Pereira Almeida
 # Hendryl Figueiredo Miranda
+# João Victor Silva Soares
 
 import argparse
 import socket

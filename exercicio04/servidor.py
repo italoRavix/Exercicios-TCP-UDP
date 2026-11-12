@@ -1,6 +1,7 @@
-# Exercicio 04 - client
+# Exercicio 04 - server
 # Italo Tadeu Pereira Almeida
 # Hendryl Figueiredo Miranda
+# João Victor Silva Soares
 
 import argparse
 import socket

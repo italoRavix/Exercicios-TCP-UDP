@@ -1,6 +1,7 @@
-# Exercicio 03 - client
+# Exercicio 03- client
 # Italo Tadeu Pereira Almeida
 # Hendryl Figueiredo Miranda
+# João Victor Silva Soares
 
 import sys
 import argparse

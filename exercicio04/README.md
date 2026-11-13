@@ -1,5 +1,11 @@
 # Exercício 4 - Servidor de Hora com Threads (UDP)
 
+## Integrantes
+
+- Italo Tadeu Pereira Almeida
+- Hendryl Figueiredo Miranda
+- João Victor Silva Soares
+
 ## Descrição
 
 Neste exercício foi criado um servidor UDP que recebe pedidos dos clientes e envia a hora atual.

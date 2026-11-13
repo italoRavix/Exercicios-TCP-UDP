@@ -1,5 +1,11 @@
 # Exercício - Chat TCP
 
+## Integrantes
+
+- Italo Tadeu Pereira Almeida
+- Hendryl Figueiredo Miranda
+- João Victor Silva Soares
+
 ## Descrição
 
 Neste exercício foi criado um servidor TCP que recebe mensagens dos clientes e as envia em broadcast

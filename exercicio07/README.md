@@ -1,5 +1,11 @@
 # Exercício 7 - Resolução de Nomes via DNS
 
+## Integrantes
+
+- Italo Tadeu Pereira Almeida
+- Hendryl Figueiredo Miranda
+- João Victor Silva Soares
+
 ## Como executar
 
 1. Abrir o Wireshark no Linux

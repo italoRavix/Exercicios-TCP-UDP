@@ -1,5 +1,11 @@
 # Exercício - Servidor Echo UDP
 
+## Integrantes
+
+- Italo Tadeu Pereira Almeida
+- Hendryl Figueiredo Miranda
+- João Victor Silva Soares
+
 ## Descrição
 
 Neste exercício foi criado um servidor UDP que recebe mensagens dos clientes o as envia de volta.

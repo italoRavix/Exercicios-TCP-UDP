@@ -1,5 +1,11 @@
 # Exercício - Servidor de confirmação de recebimento TCP
 
+## Integrantes
+
+- Italo Tadeu Pereira Almeida
+- Hendryl Figueiredo Miranda
+- João Victor Silva Soares
+
 ## Descrição
 
 Neste exercício foi criado um servidor TCP que recebe mensagens dos clientes e as envia para a origem uma mensagem de confirmação.
